@@ -2,6 +2,8 @@
 #include <iostream>
 #include <sstream>
 
+using namespace sf;
+
 void menu(sf::RenderWindow &window)
 {
     sf::Font font;
@@ -35,56 +37,45 @@ void menu(sf::RenderWindow &window)
     menuBg.setPosition(130, 310);
 
     bool isMenu = true;
-    int menuNum;
-    sf::Event event;
-    // pollEvents(window);
+    int menuNum = 0;
     //////////////////////////////МЕНЮ///////////////////
     while (isMenu)
     {
-        sf::Event event;
-        while (window.pollEvent(event))
+        newGame.setColor(Color::Black);
+        exitText.setColor(Color::Black);
+        menuNum = 0;
+        window.clear(Color(129, 181, 221));
+        // sf::Event event;
+
+        if (IntRect(210, 430, 250, 45).contains(Mouse::getPosition(window)))
         {
-            window.clear(sf::Color(129, 181, 221));
-            newGame.setColor(sf::Color::Black);
-            exitText.setColor(sf::Color::Black);
-            menuNum = 0;
-            if (sf::IntRect(210, 430, 250, 45).contains(sf::Mouse::getPosition(window)))
-            {
-                newGame.setColor(sf::Color::Blue);
-                menuNum = 1;
-            }
-            if (sf::IntRect(210, 500, 250, 45).contains(sf::Mouse::getPosition(window)))
-            {
-                exitText.setColor(sf::Color::Blue);
-                menuNum = 2;
-            }
-
-            if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-            {
-                if (menuNum == 1)
-                {
-                    isMenu = false;
-                }
-                else if (menuNum == 2)
-                {
-                    window.close();
-                    isMenu = false;
-                    std::cerr << "incorrect stop" << std::endl;
-                }
-            }
-            if (event.type == sf::Event::Closed)
-            {
-                isMenu = false;
-                window.close();
-            }
-
-            window.draw(menuBg);
-            window.draw(newGame);
-            window.draw(exitText);
-            window.draw(introText);
-            window.draw(instructions);
-            window.draw(menuLogo);
-            window.display();
+            newGame.setColor(Color::Blue);
+            menuNum = 1;
         }
+        if (IntRect(210, 500, 250, 45).contains(Mouse::getPosition(window)))
+        {
+            exitText.setColor(Color::Blue);
+            menuNum = 2;
+        }
+
+        if (Mouse::isButtonPressed(Mouse::Left))
+        {
+            if (menuNum == 1)
+                isMenu = false; //если нажали первую кнопку, то выходим из меню
+            if (menuNum == 2)
+            {
+                window.close();
+                isMenu = false;
+            }
+        }
+
+        window.draw(menuBg);
+        window.draw(newGame);
+        window.draw(exitText);
+        window.draw(introText);
+        window.draw(instructions);
+        window.draw(menuLogo);
+
+        window.display();
     }
 }
