@@ -25,8 +25,8 @@ void randomMapGenerate()
 
     while (countClouds > 0)
     {
-        randomElementX = 1 + rand() % (WIDTH_MAP);
-        randomElementY = 1 + rand() % (HEIGHT_MAP);
+        randomElementX = rand() % (WIDTH_MAP);
+        randomElementY = rand() % (HEIGHT_MAP);
 
         if (TileMap[randomElementY][randomElementX] == ' ')
         {

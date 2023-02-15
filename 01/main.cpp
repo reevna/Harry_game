@@ -9,7 +9,7 @@
 #include <iostream>
 #include <sstream>
 #include <exception>
-// #include "menu.h"
+#include "menu.h"
 #include "map.h"
 
 using namespace sf;
@@ -27,84 +27,6 @@ void pollEvents(sf::RenderWindow &window)
         default:
             break;
         }
-    }
-}
-
-void menu(sf::RenderWindow &window)
-{
-    sf::Font font;
-    font.loadFromFile("font/HarryFont.ttf");
-    sf::Text introText("", font, 90);
-    introText.setFont(font);
-    introText.setString("Welcome to the Qiuddich game");
-    introText.setFillColor(sf::Color::White);
-    introText.setPosition(180, 190);
-
-    sf::Texture newGameTexture, exitTextButton, menuBackground, menuLogoTexture;
-    newGameTexture.loadFromFile("img/ng1.png");
-    exitTextButton.loadFromFile("img/exit1.png");
-    menuBackground.loadFromFile("img/scroll.png");
-    menuLogoTexture.loadFromFile("img/logo2.png");
-
-    sf::Sprite newGame(newGameTexture);
-    sf::Sprite exitText(exitTextButton);
-    sf::Sprite menuBg(menuBackground);
-    sf::Sprite menuLogo(menuLogoTexture);
-
-    sf::Text instructions("", font, 50);
-    instructions.setFont(font);
-    instructions.setString("Collect snitches, \n be aware of blagers and Malfoy. \n \n Use arrows to fly.");
-    instructions.setFillColor(sf::Color::White);
-    instructions.setPosition(530, 360);
-    menuLogo.setPosition(500, 40);
-
-    newGame.setPosition(210, 430);
-    exitText.setPosition(210, 500);
-    menuBg.setPosition(130, 310);
-
-    bool isMenu = true;
-    int menuNum = 0;
-    //////////////////////////////МЕНЮ///////////////////
-    while (isMenu)
-    {
-        newGame.setColor(Color::Black);
-        exitText.setColor(Color::Black);
-        menuNum = 0;
-        window.clear(Color(129, 181, 221));
-
-        if (IntRect(210, 430, 250, 45).contains(Mouse::getPosition(window)))
-        {
-            newGame.setColor(Color::Blue);
-            menuNum = 1;
-        }
-        if (IntRect(210, 500, 250, 45).contains(Mouse::getPosition(window)))
-        {
-            exitText.setColor(Color::Blue);
-            menuNum = 2;
-        }
-
-        if (Mouse::isButtonPressed(Mouse::Left))
-        {
-            if (menuNum == 1)
-            {
-                isMenu = false;
-            }
-
-            if (menuNum == 2)
-            {
-                window.close();
-                isMenu = false;
-            }
-        }
-
-        window.draw(menuBg);
-        window.draw(newGame);
-        window.draw(exitText);
-        window.draw(introText);
-        window.draw(instructions);
-        window.draw(menuLogo);
-
-        window.display();
     }
 }
 
@@ -166,52 +88,44 @@ int main()
     health.setPosition(850, 20);
     health.setTextureRect(IntRect(0, 0, 310, 48)); //full health
 
-    //////////// BOOM /////////////////////////
-    // sf::Texture boomtexture;
-    // boomtexture.loadFromFile("img/boom2.png");
-    // sf::Sprite boom(boomtexture);
-    // boom.setPosition(-200, -200);
-
     //////////// Chocolate ////////////////////
-    sf::Texture bartexture;
-    bartexture.loadFromFile("img/bar.png");
-    sf::Sprite bar(bartexture);
+    sf::Texture barTexture;
+    barTexture.loadFromFile("img/bar.png");
+    sf::Sprite bar(barTexture);
     bar.setPosition(-100, -100);
 
     //////////// Harry /////////////////////////
-    sf::Texture harrytexture;
-    harrytexture.loadFromFile("img/harry.png");
-    sf::Sprite harry(harrytexture);
+    sf::Texture harryTexture;
+    harryTexture.loadFromFile("img/harry.png");
+    sf::Sprite harry(harryTexture);
     harry.setOrigin(90.f, 90.f);
     float start_harry_pos_x = WINDOW_WIDTH / 2;
     float start_harry_pos_y = WINDOW_HEIGHT / 2;
     harry.setPosition(start_harry_pos_x, start_harry_pos_y);
-    // auto pos = harry.getPosition();
     harry.setTextureRect(IntRect(0, 0, 180, 142));
 
     //////////// Snitch /////////////////////////
-    sf::Texture snitchtexture;
-    snitchtexture.loadFromFile("img/snitch.png");
-    snitchtexture.setSmooth(true);
-    sf::Sprite snitch(snitchtexture);
+    sf::Texture snitchTexture;
+    snitchTexture.loadFromFile("img/snitch.png");
+    snitchTexture.setSmooth(true);
+    sf::Sprite snitch(snitchTexture);
     snitch.setScale(sf::Vector2f(0.3f, 0.3f));
     snitch.setRotation(310.f);
 
-    // snitch.setPosition({100, 100});
     sf::Vector2f snitchSpeed = {250.f, 85.f};
 
     //////////// Malfoy /////////////////////////
-    sf::Texture malfoytexture;
-    malfoytexture.loadFromFile("img/malfoy.png");
-    sf::Sprite malfoy(malfoytexture);
+    sf::Texture malfoyTexture;
+    malfoyTexture.loadFromFile("img/malfoy.png");
+    sf::Sprite malfoy(malfoyTexture);
 
     sf::Vector2f malfoySpeed = {300.f, 75.f};
 
     //////////// Blager /////////////////////////
-    sf::Texture blagertexture;
-    blagertexture.loadFromFile("img/blager.png");
-    blagertexture.setSmooth(true);
-    sf::Sprite blager(blagertexture);
+    sf::Texture blagerTexture;
+    blagerTexture.loadFromFile("img/blager.png");
+    blagerTexture.setSmooth(true);
+    sf::Sprite blager(blagerTexture);
     blager.setScale(sf::Vector2f(0.5f, 0.5f));
     sf::Vector2f blagerSpeed = {350.f, 15.f};
 
@@ -230,16 +144,13 @@ int main()
     bool gameIsOver = false;
     bool harryWins = false;
     bool showLevelText = true;
-    // bool paused = true;
     bool barIsShown = false;
     auto pos = harry.getPosition();
-    // auto boomPos = boom.getPosition();
     Clock clock;
 
     while (window.isOpen())
     {
         float time = clock.getElapsedTime().asSeconds();
-        // std::cout << time << std::endl;
         sf::Event Event;
 
         while (window.pollEvent(Event))
@@ -268,14 +179,6 @@ int main()
                     harry.setScale(sf::Vector2f(1, 1));
                     harry.move(10, 0);
                 }
-                // else if (Event.key.code == sf::Keyboard::Return)
-                // {
-                //     paused = false;
-                // }
-                // else if (Event.key.code == sf::Keyboard::Space)
-                // {
-                //     paused = true;
-                // }
             }
             auto pos = harry.getPosition();
             if (pos.x >= WINDOW_WIDTH)
@@ -301,8 +204,6 @@ int main()
         }
         // check if Harry is out of borders
 
-        // if (!paused)
-        // {
         const float deltaTime = clock.restart().asSeconds();
 
         sf::Vector2f snitchPos = snitch.getPosition();
@@ -318,8 +219,6 @@ int main()
         {
             float x = std::rand() % (WINDOW_WIDTH / 10);
             float y = std::rand() % WINDOW_HEIGHT;
-            // float x = std::rand() % (WINDOW_WIDTH / 10) * 2;
-            // float y = std::rand() % (WINDOW_HEIGHT / 10) * 10;
             snitch.setPosition(x, y);
             snichIsCaught = false;
             snitchIsOut = false;
@@ -365,24 +264,24 @@ int main()
         ////////////////   Moving blager
         int randomMoveX = std::rand() % WINDOW_WIDTH;
         int randomMoveY = std::rand() % WINDOW_HEIGHT;
-        sf::Vector2f blagerposition = blager.getPosition();
-        blagerposition += blagerSpeed * deltaTime;
-        blager.setPosition(blagerposition);
+        sf::Vector2f blagerPosition = blager.getPosition();
+        blagerPosition += blagerSpeed * deltaTime;
+        blager.setPosition(blagerPosition);
         blager.move(0.2, -0.1);
 
-        if (blagerposition.x >= WINDOW_WIDTH)
+        if (blagerPosition.x >= WINDOW_WIDTH)
         {
             blager.setPosition(0, randomMoveY);
         }
-        else if (blagerposition.x < 0)
+        else if (blagerPosition.x < 0)
         {
             blager.setPosition(0, randomMoveY);
         }
-        else if (blagerposition.y >= WINDOW_HEIGHT)
+        else if (blagerPosition.y >= WINDOW_HEIGHT)
         {
             blager.setPosition(0, randomMoveY);
         }
-        else if (blagerposition.y < 0)
+        else if (blagerPosition.y < 0)
         {
             blager.setPosition(0, randomMoveY);
         }
@@ -401,35 +300,34 @@ int main()
         // }
 
         ////////////////   Moving Malfoy
-        sf::Vector2f malfoyposition = malfoy.getPosition();
-        malfoyposition += malfoySpeed * deltaTime;
+        sf::Vector2f malfoyPosition = malfoy.getPosition();
+        malfoyPosition += malfoySpeed * deltaTime;
 
-        if ((malfoyposition.x >= 1300) && (malfoySpeed.x > 0))
+        if ((malfoyPosition.x >= 1300) && (malfoySpeed.x > 0))
         {
             malfoySpeed.x = -malfoySpeed.x;
             malfoy.setScale(sf::Vector2f(-1, 1));
         }
-        if ((malfoyposition.x < 0) && (malfoySpeed.x < 0))
+        if ((malfoyPosition.x < 0) && (malfoySpeed.x < 0))
         {
             malfoySpeed.x = -malfoySpeed.x;
             malfoy.setScale(sf::Vector2f(1, 1));
         }
-        if ((malfoyposition.y >= 800) && (malfoySpeed.y > 0))
+        if ((malfoyPosition.y >= 800) && (malfoySpeed.y > 0))
         {
             malfoySpeed.y = -malfoySpeed.y;
         }
-        if ((malfoyposition.y < 0) && (malfoySpeed.y < 0))
+        if ((malfoyPosition.y < 0) && (malfoySpeed.y < 0))
         {
             malfoySpeed.y = -malfoySpeed.y;
         }
-        malfoy.setPosition(malfoyposition);
+        malfoy.setPosition(malfoyPosition);
 
         if (harry.getGlobalBounds().intersects(malfoy.getGlobalBounds()))
         {
             harryIsHit = true;
             --life;
             malfoySpeed.x = -malfoySpeed.x;
-            // malfoySpeed.y = -malfoySpeed.y;
             malfoy.setScale(sf::Vector2f(-1, 1));
         }
 
@@ -471,13 +369,6 @@ int main()
             barIsShown = true;
             bar.setPosition(300, 300);
         }
-
-        // if ((score >= 3) && (barIsShown))
-        // {
-        //     // timer = 0;
-        //     bar.setPosition(-100, -100);
-        //     barIsShown = false;
-        // }
 
         if (harry.getGlobalBounds().intersects(bar.getGlobalBounds()))
         {
@@ -531,7 +422,6 @@ int main()
             window.draw(blager);
             window.draw(malfoy);
             window.draw(bar);
-            // window.draw(boom);
         }
 
         window.display();
